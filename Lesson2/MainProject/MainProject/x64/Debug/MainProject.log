@@ -1,0 +1,5 @@
+﻿  Functions.cpp
+  Source.cpp
+C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson2\MainProject\MainProject\Source.cpp(11,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+  MainProject.vcxproj -> C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson2\MainProject\x64\Debug\MainProject.exe

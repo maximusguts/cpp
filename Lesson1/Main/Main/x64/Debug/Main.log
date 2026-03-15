@@ -1,0 +1,8 @@
+﻿  Source.cpp
+C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson1\Main\Main\Source.cpp(15,13): warning C4566: character represented by universal-character-name '\u043F' cannot be represented in the current code page (1252)
+C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson1\Main\Main\Source.cpp(15,13): warning C4566: character represented by universal-character-name '\u0440' cannot be represented in the current code page (1252)
+C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson1\Main\Main\Source.cpp(15,13): warning C4566: character represented by universal-character-name '\u0438' cannot be represented in the current code page (1252)
+C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson1\Main\Main\Source.cpp(15,13): warning C4566: character represented by universal-character-name '\u0432' cannot be represented in the current code page (1252)
+C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson1\Main\Main\Source.cpp(15,13): warning C4566: character represented by universal-character-name '\u0456' cannot be represented in the current code page (1252)
+C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson1\Main\Main\Source.cpp(15,13): warning C4566: character represented by universal-character-name '\u0442' cannot be represented in the current code page (1252)
+  Main.vcxproj -> C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson1\Main\x64\Debug\Main.exe

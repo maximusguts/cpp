@@ -1,0 +1,3 @@
+TEST|test
+OPEN|1|are you gay?|1
+END

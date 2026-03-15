@@ -1,0 +1,5 @@
+﻿  Source.cpp
+C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson1\Project\Project\Source.cpp(15,11): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson1\Project\Project\Source.cpp(16,11): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson1\Project\Project\Source.cpp(17,11): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  Project.vcxproj -> C:\Users\maxim\OneDrive\Документы\Progranimg\c++\c++\Lesson1\Project\x64\Debug\Project.exe

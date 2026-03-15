@@ -1,0 +1,93 @@
+################## Fundamentals of C++ Programming ##################
+---------------------------------------------------------------------
+##################      Homework  Assignments      ##################
+
+// TASK 1 (Installing and adjusting Git)
+
+git --version                 // cheking, that Git installed
+
+// if "fatal error" -> installing Git from browser, or OS repositories. after that adding to paths (idk how it working, but at least in Windows that thing exist)
+
+git config --global user.name "Your Name"
+git config --global user.email "yourexample@email.com"
+
+
+// TASK 2 (Creating a folder with two subfolders)
+
+mkdir GitHomework
+cd GitHomework
+mkdir folder1 folder2
+echo "Hello from file1" > folder1/file1.txt  // ---,
+echo "Another file" > folder2/file2.txt      // ---'---> this lines creating two files, one in folder1, and one in folder2. and in each of them outputs diffrent specific texts.
+
+
+// TASK 3 (creating repository)
+
+git init
+
+
+// TASK 4 (Adding files to stage)
+
+git add folder1 folder2
+// or
+// git add .
+// or
+// git add --a
+
+
+// TASK 5 (making commit)
+
+git commit -m "Initial commit: added folder1 and folder2 with their files"
+
+
+// TASK 6 (editing some file and makin new commit)
+
+echo "Edited content" >> folder1/file1.txt
+git add folder1/file1.txt
+git commit -m "Updated file1.txt"
+
+
+// TASK 7 (creating new folder)
+
+mkdir folder3
+echo "File in folder3" > folder3/file3.txt
+git add folder3
+git commit -m "Added folder3 with file3.txt"
+
+
+// TASK 8 (editin file in new folder, and discardin changes)
+
+echo "Some changes" >> folder3/file3.txt
+git checkout -- folder3/file3.txt
+// or
+// git checkout -- .
+// if you wants discard all, after last commit
+// like
+// git checkout (commit id)
+
+
+// TASK 9 (editin file, addin it to stage, and discardin all added to stage changes)
+
+echo "Changes again" >> folder3/file3.txt
+git add folder3/file3.txt
+git reset folder3/file3.txt
+
+
+// TASK 10 (some changes -> commit -> discard commit)
+
+echo "New commit changes" >> folder3/file3.txt
+git add folder3/file3.txt
+git commit -m "Commit with new changes"
+git revert HEAD         // <- main part (discardin commit)
+
+
+// TASK 11 (deletin the last few commits)
+
+git reset --hard HEAD~2 // deletin last 2 commits
+
+
+// TASK 12 (makin some changes into last commit (without new))
+
+echo "Fixing last commit" >> folder3/file3.txt
+git add folder3/file3.txt
+git commit --amend -m "Updated last commit with fixes"
