@@ -1,0 +1,1 @@
+g++ .\MINESWEEPER\Minesweeper.cpp -o .\MINESWEEPER\Minesweeper.exe

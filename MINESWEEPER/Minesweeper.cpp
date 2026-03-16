@@ -47,68 +47,6 @@ struct PlayerStats {
     int expertWins;
 };
 
-class MinesweeperSolver {
-private:
-    int** board;
-    bool** mines;
-    CellState** states;
-    int width, height, mineCount;
-
-public:
-    MinesweeperSolver(int** gameBoard, bool** gameMines, CellState** gameStates, 
-                     int w, int h, int mCount) {
-        board = gameBoard;
-        mines = gameMines;
-        states = gameStates;
-        width = w;
-        height = h;
-        mineCount = mCount;
-    }
-
-    bool getHint(int& hintX, int& hintY) {
-        // Simple solver logic - find safe cells
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++) {
-                if(states[y][x] == REVEALED && board[y][x] > 0) {
-                    int flaggedCount = 0;
-                    int hiddenCount = 0;
-                    
-                    // Count flagged and hidden neighbors
-                    for(int dy = -1; dy <= 1; dy++) {
-                        for(int dx = -1; dx <= 1; dx++) {
-                            int nx = x + dx;
-                            int ny = y + dy;
-                            
-                            if(nx >= 0 && nx < width && ny >= 0 && ny < height) {
-                                if(states[ny][nx] == FLAGGED) flaggedCount++;
-                                if(states[ny][nx] == HIDDEN) hiddenCount++;
-                            }
-                        }
-                    }
-                    
-                    // If all mines are flagged, reveal safe cells
-                    if(flaggedCount == board[y][x] && hiddenCount > 0) {
-                        for(int dy = -1; dy <= 1; dy++) {
-                            for(int dx = -1; dx <= 1; dx++) {
-                                int nx = x + dx;
-                                int ny = y + dy;
-                                
-                                if(nx >= 0 && nx < width && ny >= 0 && ny < height && 
-                                   states[ny][nx] == HIDDEN) {
-                                    hintX = nx;
-                                    hintY = ny;
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-};
-
 class Game {
 private:
     int** board;
@@ -124,7 +62,6 @@ private:
     time_t startTime;
     int elapsedTime;
     PlayerStats* playerStats;
-    MinesweeperSolver* solver;
 
     void initializeBoard() {
         // Allocate memory for arrays
@@ -192,7 +129,6 @@ private:
             gameStarted = true;
             startTime = time(NULL);
             placeMines();
-            solver = new MinesweeperSolver(board, mines, states, width, height, mineCount);
         }
         
         states[y][x] = REVEALED;
@@ -274,6 +210,10 @@ private:
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     }
 
+    void setColor(int color) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+    }
+
 public:
     Game(int w, int h, int mines, PlayerStats* stats) {
         width = w;
@@ -288,7 +228,6 @@ public:
         gameWon = false;
         elapsedTime = 0;
         playerStats = stats;
-        solver = nullptr;
         
         initializeBoard();
     }
@@ -302,8 +241,6 @@ public:
         delete[] board;
         delete[] mines;
         delete[] states;
-        
-        if(solver) delete solver;
     }
 
     void restart() {
@@ -321,11 +258,6 @@ public:
         gameEnded = false;
         gameWon = false;
         elapsedTime = 0;
-        
-        if(solver) {
-            delete solver;
-            solver = nullptr;
-        }
     }
 
     void update() {
@@ -337,55 +269,75 @@ public:
     void draw() {
         clearScreen();
         
+        setColor(15); // Білий для заголовка
         cout << "=== MINESWEEPER ===" << endl;
         cout << "Time: " << elapsedTime << "s | Flags left: " << (mineCount - flagCount) << endl;
-        cout << "Coins: " << playerStats->coins << " | Use 'H' for hint (costs 10 coins)" << endl;
+        cout << "Coins: " << playerStats->coins << endl;
         cout << endl;
         
         for(int y = 0; y < height; y++) {
             for(int x = 0; x < width; x++) {
+                // Малювання курсора
                 if(x == cursorX && y == cursorY) {
-                    cout << "[";
+                    setColor(15); cout << "[";
                 } else {
                     cout << " ";
                 }
                 
+                // Вміст клітинки
                 if(gameEnded && mines[y][x]) {
+                    setColor(12); // Світло-червоний для мін
                     cout << "*";
                 } else if(states[y][x] == FLAGGED) {
+                    setColor(14); // Жовтий для прапорців
                     cout << "F";
                 } else if(states[y][x] == REVEALED) {
-                    if(board[y][x] == 0) {
+                    if(mines[y][x]) {
+                        setColor(12); cout << "*";
+                    } else if(board[y][x] == 0) {
                         cout << " ";
                     } else {
+                        // Кольори для цифр
+                        switch(board[y][x]) {
+                            case 1: setColor(9);  break; // Світло-синій
+                            case 2: setColor(10); break; // Світло-зелений
+                            case 3: setColor(12); break; // Світло-червоний
+                            case 4: setColor(1);  break; // Темно-синій
+                            case 5: setColor(4);  break; // Темно-червоний
+                            case 6: setColor(11); break; // Бірюзовий
+                            case 7: setColor(8);  break; // Сірий
+                            case 8: setColor(7);  break; // Білий
+                        }
                         cout << board[y][x];
                     }
                 } else {
+                    setColor(7); // Звичайний сірий для закритих
                     cout << "#";
                 }
                 
+                // Закриття курсора
                 if(x == cursorX && y == cursorY) {
-                    cout << "]";
+                    setColor(15); cout << "]";
                 } else {
                     cout << " ";
                 }
             }
+            setColor(7); // Скидання кольору в кінці рядка
             cout << endl;
         }
         
-        cout << endl;
-        cout << "Controls: Arrow keys (move), 1 (reveal), 2 (flag), 3 (chord)" << endl;
-        cout << "R (restart), H (hint), Q (quit)" << endl;
+        setColor(15);
+        cout << endl << "Controls: Arrows (move), 1 (Reveal/Chord), 2 (Flag)" << endl;
+        cout << "R (Restart), Q (Quit)" << endl;
         
         if(gameEnded) {
             if(gameWon) {
-                cout << endl << "CONGRATULATIONS! YOU WON!" << endl;
-                cout << "Time: " << elapsedTime << " seconds" << endl;
-                cout << "Press N for next game or Q to quit" << endl;
+                setColor(10); cout << endl << "CONGRATULATIONS! YOU WON!" << endl;
             } else {
-                cout << endl << "GAME OVER! You hit a mine!" << endl;
-                cout << "Press N for next game or Q to quit" << endl;
+                setColor(12); cout << endl << "GAME OVER! You hit a mine!" << endl;
             }
+            setColor(15);
+            cout << "Press N for next game or Q to quit" << endl;
         }
     }
 
@@ -393,66 +345,31 @@ public:
         if(!_kbhit()) return true;
         
         int key = _getch();
-        
-        if(key == 224) { // Arrow keys
+        if(key == 224) { 
             key = _getch();
             switch(key) {
-                case 72: // Up
-                    cursorY = max(0, cursorY - 1);
-                    break;
-                case 80: // Down
-                    cursorY = min(height - 1, cursorY + 1);
-                    break;
-                case 75: // Left
-                    cursorX = max(0, cursorX - 1);
-                    break;
-                case 77: // Right
-                    cursorX = min(width - 1, cursorX + 1);
-                    break;
+                case 72: cursorY = max(0, cursorY - 1); break;
+                case 80: cursorY = min(height - 1, cursorY + 1); break;
+                case 75: cursorX = max(0, cursorX - 1); break;
+                case 77: cursorX = min(width - 1, cursorX + 1); break;
             }
         } else {
             switch(key) {
-                case '1': // Reveal
+                case '1': // Reveal or Chord
                     if(!gameEnded) {
-                        revealCell(cursorX, cursorY);
-                    }
-                    break;
-                case '2': // Flag
-                    if(!gameEnded) {
-                        toggleFlag(cursorX, cursorY);
-                    }
-                    break;
-                case '3': // Chord
-                    if(!gameEnded) {
-                        performChord(cursorX, cursorY);
-                    }
-                    break;
-                case 'r':
-                case 'R': // Restart
-                    restart();
-                    break;
-                case 'h':
-                case 'H': // Hint
-                    if(!gameEnded && gameStarted && playerStats->coins >= 10 && solver) {
-                        int hintX, hintY;
-                        if(solver->getHint(hintX, hintY)) {
-                            playerStats->coins -= 10;
-                            cursorX = hintX;
-                            cursorY = hintY;
+                        if (states[cursorY][cursorX] == HIDDEN) {
+                            revealCell(cursorX, cursorY);
+                        } else if (states[cursorY][cursorX] == REVEALED) {
+                            performChord(cursorX, cursorY);
                         }
                     }
                     break;
-                case 'n':
-                case 'N': // Next game
-                    if(gameEnded) {
-                        return false; // Signal to start new game
-                    }
+                case '2': // Flag
+                    if(!gameEnded) toggleFlag(cursorX, cursorY);
                     break;
-                case 'q':
-                case 'Q': // Quit
-                    return false;
-                case 27: // ESC
-                    return false;
+                case 'r': case 'R': restart(); break;
+                case 'n': case 'N': if(gameEnded) return false; break;
+                case 'q': case 'Q': case 27: return false;
             }
         }
         return true;
