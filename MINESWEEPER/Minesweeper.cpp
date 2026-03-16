@@ -269,7 +269,7 @@ public:
     void draw() {
         clearScreen();
         
-        setColor(15); // Білий для заголовка
+        setColor(15); // White for the title
         cout << "=== MINESWEEPER ===" << endl;
         cout << "Time: " << elapsedTime << "s | Flags left: " << (mineCount - flagCount) << endl;
         cout << "Coins: " << playerStats->coins << endl;
@@ -277,19 +277,19 @@ public:
         
         for(int y = 0; y < height; y++) {
             for(int x = 0; x < width; x++) {
-                // Малювання курсора
+                // Drawing the cursor
                 if(x == cursorX && y == cursorY) {
                     setColor(15); cout << "[";
                 } else {
                     cout << " ";
                 }
                 
-                // Вміст клітинки
+                // Cell content
                 if(gameEnded && mines[y][x]) {
-                    setColor(12); // Світло-червоний для мін
+                    setColor(12); // Light red for mines
                     cout << "*";
                 } else if(states[y][x] == FLAGGED) {
-                    setColor(14); // Жовтий для прапорців
+                    setColor(14); // Yellow for flags
                     cout << "F";
                 } else if(states[y][x] == REVEALED) {
                     if(mines[y][x]) {
@@ -297,32 +297,32 @@ public:
                     } else if(board[y][x] == 0) {
                         cout << " ";
                     } else {
-                        // Кольори для цифр
+                        // Colors for numbers
                         switch(board[y][x]) {
-                            case 1: setColor(9);  break; // Світло-синій
-                            case 2: setColor(10); break; // Світло-зелений
-                            case 3: setColor(12); break; // Світло-червоний
-                            case 4: setColor(1);  break; // Темно-синій
-                            case 5: setColor(4);  break; // Темно-червоний
-                            case 6: setColor(11); break; // Бірюзовий
-                            case 7: setColor(8);  break; // Сірий
-                            case 8: setColor(7);  break; // Білий
+                            case 1: setColor(9);  break; // Light blue
+                            case 2: setColor(10); break; // Light green
+                            case 3: setColor(12); break; // Light red
+                            case 4: setColor(1);  break; // Dark blue
+                            case 5: setColor(4);  break; // Dark red
+                            case 6: setColor(11); break; // Cyan
+                            case 7: setColor(8);  break; // Gray
+                            case 8: setColor(7);  break; // White
                         }
                         cout << board[y][x];
                     }
                 } else {
-                    setColor(7); // Звичайний сірий для закритих
+                    setColor(7); // Regular gray for hidden cells
                     cout << "#";
                 }
                 
-                // Закриття курсора
+                // Closing the cursor
                 if(x == cursorX && y == cursorY) {
                     setColor(15); cout << "]";
                 } else {
                     cout << " ";
                 }
             }
-            setColor(7); // Скидання кольору в кінці рядка
+            setColor(7); // Resetting color at the end of the row
             cout << endl;
         }
         
@@ -471,7 +471,7 @@ private:
     void showMainMenu() {
         system("cls");
         cout << "================================" << endl;
-        cout << "       MINESWEEPER GAME        " << endl;
+        cout << "       MINESWEEPER GAME         " << endl;
         cout << "================================" << endl;
         cout << endl;
         cout << "Welcome to the classic Minesweeper!" << endl;
